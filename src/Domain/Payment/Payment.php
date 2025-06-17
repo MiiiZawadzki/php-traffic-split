@@ -5,7 +5,7 @@ namespace Src\Domain\Payment;
 use Src\Domain\Payment\ValueObject\Money;
 use Src\Domain\Payment\ValueObject\PaymentId;
 
-final readonly class Payment
+final readonly class Payment implements PaymentInterface
 {
     public function __construct(
         private PaymentId $id,

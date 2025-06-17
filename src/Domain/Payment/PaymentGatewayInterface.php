@@ -10,8 +10,8 @@ interface PaymentGatewayInterface
     public function getTrafficLoad(): int;
 
     /**
-     * @param Payment $payment
+     * @param PaymentInterface $payment
      * @return void
      */
-    public function handle(Payment $payment): void;
+    public function handle(PaymentInterface $payment): void;
 }
