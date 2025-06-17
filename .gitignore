@@ -1,0 +1,9 @@
+# IDE files
+/.phpunit.cache
+/.idea
+/.vscode
+.DS_Store
+
+# vendor packages
+/vendor
+.phpunit.result.cache
