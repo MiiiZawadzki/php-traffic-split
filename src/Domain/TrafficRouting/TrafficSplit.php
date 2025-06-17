@@ -2,13 +2,14 @@
 
 namespace Src\Domain\TrafficRouting;
 
+use Exception;
 use Src\Domain\Payment\PaymentInterface;
+use Src\Infrastructure\DependencyInjection\Container;
 
 readonly class TrafficSplit
 {
     public function __construct(
-        private array                  $gateways,
-        private SplitStrategyInterface $splitter
+        private array $gateways
     )
     {
     }
@@ -16,10 +17,16 @@ readonly class TrafficSplit
     /**
      * @param PaymentInterface $payment
      * @return void
+     * @throws Exception
      */
     public function handlePayment(PaymentInterface $payment): void
     {
-        $gateway = $this->splitter->selectGateway($this->gateways);
+        $container = Container::getInstance();
+
+        /** @var SplitStrategyInterface $splitter */
+        $splitter = $container->make(SplitStrategyInterface::class);
+
+        $gateway = $splitter->selectGateway($this->gateways);
         $gateway->handle($payment);
     }
 }

@@ -10,6 +10,7 @@ use Src\Domain\TrafficRouting\Strategy\WeightedStrategy;
 use Src\Domain\TrafficRouting\TrafficSplit;
 use Src\Domain\TrafficRouting\ValueObject\TrafficWeight;
 use Src\Domain\TrafficRouting\WeightedGateway;
+use Src\Infrastructure\DependencyInjection\Container;
 use Src\Infrastructure\Gateway\PaymentGateway;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -18,7 +19,11 @@ $results = [];
 
 function initSimulation(SplitStrategyInterface $strategy, array $gateways, string $name, array &$results): void
 {
-    $splitter = new TrafficSplit($gateways, $strategy);
+    // DI set up
+    $container = Container::getInstance();
+    $container->bind(SplitStrategyInterface::class, fn() => $strategy);
+
+    $splitter = new TrafficSplit($gateways);
 
     $service = new PaymentService($splitter);
 

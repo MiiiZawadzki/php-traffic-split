@@ -8,11 +8,13 @@ use PHPUnit\Framework\TestCase;
 use Src\Domain\Payment\Payment;
 use Src\Domain\Payment\ValueObject\Money;
 use Src\Domain\Payment\ValueObject\PaymentId;
+use Src\Domain\TrafficRouting\SplitStrategyInterface;
 use Src\Domain\TrafficRouting\Strategy\LeastLoadedStrategy;
 use Src\Domain\TrafficRouting\Strategy\WeightedStrategy;
 use Src\Domain\TrafficRouting\TrafficSplit;
 use Src\Domain\TrafficRouting\ValueObject\TrafficWeight;
 use Src\Domain\TrafficRouting\WeightedGateway;
+use Src\Infrastructure\DependencyInjection\Container;
 use Src\Infrastructure\Gateway\PaymentGateway;
 
 #[CoversClass(TrafficSplit::class)]
@@ -32,7 +34,10 @@ final class TrafficSplitIntegrationTest extends TestCase
             new WeightedGateway($gatewayC, new TrafficWeight(10)),
         ];
 
-        $splitter = new TrafficSplit($gateways, new WeightedStrategy());
+        $container = Container::getInstance();
+        $container->bind(SplitStrategyInterface::class, fn() => new WeightedStrategy());
+
+        $splitter = new TrafficSplit($gateways);
 
         for ($i = 0; $i < 100; $i++) {
             $splitter->handlePayment(
@@ -65,7 +70,10 @@ final class TrafficSplitIntegrationTest extends TestCase
             $gatewayC
         ];
 
-        $splitter = new TrafficSplit($gateways, new LeastLoadedStrategy());
+        $container = Container::getInstance();
+        $container->bind(SplitStrategyInterface::class, fn() => new LeastLoadedStrategy());
+
+        $splitter = new TrafficSplit($gateways);
 
         for ($i = 0; $i < 100; $i++) {
             $splitter->handlePayment(
