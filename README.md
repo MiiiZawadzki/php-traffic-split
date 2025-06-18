@@ -23,7 +23,10 @@ The application has a rather typical structure:
 * `/tests` folder contains unit and integration tests.
 
 ## Project Setup
-To run the application locally:
+Prerequisites:
+* PHP and Composer are installed.
+
+Running the Application:
 1. Copy project files (e.g. `git clone`) and navigate to the main (root) project directory.
 2. Run `composer install` to install dependencies and generate autoload files.
 3. Use a web server like Apache or Nginx to serve the application, the main entry point is `/public/index.php` file. For local usage PHP built-in server might be enough. Navigate to `public` folder and run:
